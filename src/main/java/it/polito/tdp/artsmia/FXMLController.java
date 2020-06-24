@@ -1,9 +1,12 @@
 package it.polito.tdp.artsmia;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
-
+import java.util.stream.Stream;
+import java.util.stream.*;
 import it.polito.tdp.artsmia.model.ArtObject;
 import it.polito.tdp.artsmia.model.Model;
 import javafx.event.ActionEvent;
@@ -24,7 +27,7 @@ public class FXMLController {
     private URL location;
 
     @FXML
-    private ChoiceBox<?> boxLUN;
+    private ChoiceBox<Integer> boxLUN;
 
     @FXML
     private Button btnCalcolaComponenteConnessa;
@@ -74,13 +77,42 @@ public class FXMLController {
     		/*for(ArtObject o:visita) {
     			this.txtResult.appendText(o+"\n");
     		}*/
+    		
+    		List<Integer> lun;
+    		/*for(int i=2;i<visita.size();i++) {
+    			lun.add(i);
+    		}
+    		this.boxLUN.getItems().addAll(lun);*/
     	}
     	
     }
 
     @FXML
     void doCercaOggetti(ActionEvent event) {
-
+    	String toBeParsed=this.txtObjectId.getText();
+    	Integer objectId=null;
+    	try {
+    		objectId=Integer.parseInt(toBeParsed);
+    	}catch (NumberFormatException e) {
+    		e.printStackTrace();
+    		this.txtResult.appendText("ATTENZIONE! L'id oggettoinserito non è un numero.\n");
+    	}
+    	/*Integer lun=this.boxLUN.getValue();
+    	if(lun==null) {
+    		this.txtResult.appendText("ATTENZIONE! Nessun LUN selezionato!\n");
+    		return;
+    	}*/
+    	if(!model.test(objectId)) {
+    		this.txtResult.appendText("ATTENZIONE! L'id oggetto inserito non esiste nel database");
+    		return;
+    	}else {
+    		Integer lun=2;
+    		List<ArtObject> cammino=model.cercaOggetti(objectId,lun);
+    		this.txtResult.appendText("PESO TOTALE: "+model.getPesoCammino()+"\n");
+    		for(ArtObject o:cammino) {
+    			this.txtResult.appendText(o+"\n");
+    		}
+    	}
     }
 
     @FXML

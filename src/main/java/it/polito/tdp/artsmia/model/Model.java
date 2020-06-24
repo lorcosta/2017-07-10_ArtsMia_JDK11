@@ -1,6 +1,7 @@
 package it.polito.tdp.artsmia.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,8 @@ public class Model {
 	private SimpleWeightedGraph<ArtObject,DefaultWeightedEdge> graph;
 	private ArtsmiaDAO dao=new ArtsmiaDAO();
 	private Map<Integer,ArtObject> idMapObject;
+	private List<ArtObject> bestCammino;
+	private Double bestPeso=0.0;
 	
 	public void creaGrafo() {
 		this.idMapObject=new HashMap<>();
@@ -48,4 +51,38 @@ public class Model {
 		}
 		return visita;
 	}
+	public List<ArtObject> cercaOggetti(Integer objectId,Integer lun) {
+		List<ArtObject> parziale=new ArrayList<>();
+		parziale.add(idMapObject.get(objectId));
+		ricorsione(parziale,lun);
+		Collections.sort(bestCammino);
+		return bestCammino;
+		
+	}
+	private void ricorsione(List<ArtObject> parziale,Integer lun) {
+		if(parziale.size()==lun) {
+			if(bestPeso<calcolaPeso(parziale)) {
+				bestPeso=calcolaPeso(parziale);
+				bestCammino=new ArrayList<>(parziale);
+			}
+		}
+		for(ArtObject o:Graphs.neighborListOf(this.graph,parziale.get(parziale.size()-1))) {
+			if(o.getClassification().equals(parziale.get(0).getClassification()) && !parziale.contains(o)) {
+				parziale.add(o);
+				ricorsione(parziale,lun);
+				parziale.remove(parziale.size()-1);
+			}
+		}
+		
+	}
+	private Double calcolaPeso(List<ArtObject> parziale) {
+		Double peso=0.0;
+		for(int i=1;i<parziale.size();i++) {
+			peso+=this.graph.getEdgeWeight(this.graph.getEdge(parziale.get(i-1), parziale.get(i)));
+		}
+		return peso;
+	}
+	 public Double getPesoCammino() {
+		 return this.bestPeso;
+	 }
 }
