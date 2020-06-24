@@ -194,7 +194,7 @@ public class ArtObject {
 	
 	@Override
 	public String toString() {
-		return "ArtObject [objectId=" + id + ", title=" + title + "]";
+		return  id + ", " + title ;
 	}
 }
 

@@ -1,8 +1,10 @@
 package it.polito.tdp.artsmia;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.artsmia.model.ArtObject;
 import it.polito.tdp.artsmia.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,12 +43,39 @@ public class FXMLController {
 
     @FXML
     void doAnalizzaOggetti(ActionEvent event) {
-
+    	this.txtResult.clear();
+    	model.creaGrafo();
+    	Integer vertici=model.getNumVertici(), archi=model.getNumArchi();
+    	if(vertici==0 || archi.equals(0)) {
+    		this.txtResult.appendText("ATTENZIONE! Qualcosa e' andato storto nella creazione del grafo.\n");
+    		return;
+    	}
+    	this.txtResult.appendText("GRAFO CREATO!\n #VERTICI: "+vertici+" e #ARCHI: "+archi+"\n");
+    	
     }
 
     @FXML
     void doCalcolaComponenteConnessa(ActionEvent event) {
-
+    	this.txtResult.clear();
+    	String toBeParsed=this.txtObjectId.getText();
+    	Integer objectId=null;
+    	try {
+    		objectId=Integer.parseInt(toBeParsed);
+    	}catch (NumberFormatException e) {
+    		e.printStackTrace();
+    		this.txtResult.appendText("ATTENZIONE! L'id oggettoinserito non è un numero.\n");
+    	}
+    	if(!model.test(objectId)) {
+    		this.txtResult.appendText("ATTENZIONE! L'id oggetto inserito non esiste nel database");
+    		return;
+    	}else {
+    		List<ArtObject> visita=model.componenteConnessa(objectId);
+    		this.txtResult.appendText("La componente connessa e' composta da "+visita.size()+" vertici.\n");
+    		/*for(ArtObject o:visita) {
+    			this.txtResult.appendText(o+"\n");
+    		}*/
+    	}
+    	
     }
 
     @FXML
