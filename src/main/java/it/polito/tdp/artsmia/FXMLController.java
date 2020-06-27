@@ -78,11 +78,12 @@ public class FXMLController {
     			this.txtResult.appendText(o+"\n");
     		}*/
     		
-    		List<Integer> lun;
-    		/*for(int i=2;i<visita.size();i++) {
+    		List<Integer> lun=new ArrayList<>();
+    		for(int i=2;i<visita.size();i++) {
     			lun.add(i);
+    			System.out.println(i);
     		}
-    		this.boxLUN.getItems().addAll(lun);*/
+    		this.boxLUN.getItems().addAll(lun);
     	}
     	
     }
