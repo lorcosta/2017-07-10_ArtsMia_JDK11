@@ -79,10 +79,11 @@ public class FXMLController {
     		}*/
     		
     		List<Integer> lun=new ArrayList<>();
-    		for(int i=2;i<visita.size();i++) {
+    		/*for(int i=2;i<visita.size();i++) {
     			lun.add(i);
     			System.out.println(i);
-    		}
+    		}*/
+    		lun=IntStream.rangeClosed(0, visita.size()).boxed().collect(Collectors.toList());;
     		this.boxLUN.getItems().addAll(lun);
     	}
     	
