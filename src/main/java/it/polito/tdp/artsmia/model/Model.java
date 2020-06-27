@@ -32,7 +32,7 @@ public class Model {
 				Graphs.addEdgeWithVertices(this.graph, a.getO1(), a.getO2(), a.getPeso());
 			}
 		}
-		
+
 	}
 	public Integer getNumVertici() {
 		return this.graph.vertexSet().size();
